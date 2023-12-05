@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.admin.AdminUserSceneController"
+            prefHeight="400.0" prefWidth="600.0">
+        <left>
+            <VBox spacing="10">
+                <Button fx:id="addUserButton" onAction="#addUser" text="+"/>
+                <Button fx:id="updateUserButton" onAction="#updateUser" text="Update" disable="true"/>
+                <Button fx:id="removeUserButton" onAction="#removeUser" text="Remove" disable="true"/>
+            </VBox>
+
+        </left>
+        <center>
+            <TableView fx:id="tableViewUsers" onMouseClicked="#handleSelection" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+                <columns>
+                    <TableColumn fx:id="firstNameField" text="First Name" minWidth="100"/>
+                    <TableColumn fx:id="lastNameField" text="Last Name" minWidth="100"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            </TableView>
+        </center>
+
+</BorderPane>

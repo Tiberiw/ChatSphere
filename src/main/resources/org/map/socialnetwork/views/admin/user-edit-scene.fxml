@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.admin.AdminUserEditSceneController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <GridPane AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+
+        <Label fx:id="firstNameLabel" text="First Name: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="firstNameTextField"  onKeyReleased="#handleFirstNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label fx:id="lastNameLabel" text="Last Name: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="lastNameTextField" onKeyReleased="#handleLastNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="1" spacing="48">
+            <Button fx:id="saveButton" onAction="#saveUser" text="Save" />
+            <Button fx:id="cancelButton" onAction="#cancel" text="Cancel"/>
+        </HBox>
+    </GridPane>
+
+</AnchorPane>
+

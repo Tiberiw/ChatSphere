@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.user.FriendRequestController"
+            fx:id="root"
+            prefHeight="400.0" prefWidth="600.0">
+    <SplitPane fx:id="mainPane">
+        <items>
+            <BorderPane fx:id="leftSide">
+                <top>
+                    <Label fx:id="inboxLabel" text="Inbox"/>
+                </top>
+                <center>
+                    <TableView fx:id="inboxTableView">
+                        <placeholder>
+                            <Label text="Inbox empty"/>
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="inboxFirstNameField" text="First Name"/>
+                            <TableColumn fx:id="inboxLastNameField" text="Last Name"/>
+                        </columns>
+
+                    </TableView>
+                </center>
+                <bottom>
+                    <HBox spacing="50" BorderPane.alignment="BOTTOM_CENTER">
+                        <Button text="Accept" fx:id="acceptRequestButton" onAction="#acceptRequest" BorderPane.alignment="BOTTOM_CENTER"/>
+                        <Button text="Reject" fx:id="declineRequestButton" onAction="#rejectRequest" BorderPane.alignment="BOTTOM_CENTER"/>
+                    </HBox>
+                </bottom>
+            </BorderPane>
+        </items>
+        <items>
+            <BorderPane fx:id="rightSide">
+                <top>
+                    <Label fx:id="addFriendsLabel" text="Friend suggestion"/>
+                </top>
+                <center>
+                    <TableView fx:id="addFriendsTableView">
+                        <placeholder>
+                            <Label text="No friend suggestion"/>
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="addFriendsFirstNameField" text="First Name"/>
+                            <TableColumn fx:id="addFriendsLastNameField" text="Last Name"/>
+                        </columns>
+
+                    </TableView>
+
+
+                </center>
+                <bottom>
+                    <Button text="Send Request" fx:id="sendRequestButton" onAction="#sendRequest" BorderPane.alignment="BOTTOM_CENTER" />
+                </bottom>
+            </BorderPane>
+        </items>
+    </SplitPane>
+
+</AnchorPane>

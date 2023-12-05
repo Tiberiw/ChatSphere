@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import org.map.socialnetwork.utils.DateTimePicker?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.admin.AdminFriendshipEditSceneController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <GridPane>
+        <TableView fx:id="tableView" onMouseClicked="#handleSelection"  GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+            <columns>
+                <TableColumn fx:id="firstNameColumn" text="First Name"/>
+                <TableColumn fx:id="lastNameColumn" text="Last Name"/>
+                <TableColumn fx:id="componentNumberColumn" text="Component Number"/>
+            </columns>
+        </TableView>
+        <DateTimePicker fx:id="dateTimePicker" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+        <HBox GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2" spacing="48">
+            <Button fx:id="saveButton" onAction="#save" text="Save" disable="true"/>
+            <Button fx:id="cancelButton" onAction="#cancel" text="Cancel"/>
+        </HBox>
+    </GridPane>
+
+</AnchorPane>

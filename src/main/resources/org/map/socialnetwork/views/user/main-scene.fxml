@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.user.UserDashboardController"
+            prefHeight="400.0" prefWidth="600.0">
+    <BorderPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <top>
+            <HBox spacing="20" BorderPane.alignment="TOP_RIGHT">
+                <Label text="Welcome" BorderPane.alignment="TOP_LEFT"/>
+                <Label text="name" fx:id="userNameLabel" BorderPane.alignment="TOP_LEFT"/>
+                <Button text="Friend Requests" fx:id="friendRequestsButton" onAction="#showRequestDialog" BorderPane.alignment="TOP_RIGHT"/>
+
+            </HBox>
+        </top>
+        <right>
+            <VBox>
+                <Label text="Friends:"/>
+                <ListView fx:id="friendsListView" onMouseClicked="#friendSelection"/>
+            </VBox>
+        </right>
+        <center>
+            <BorderPane minWidth="700">
+                <top>
+                    <Label text="Conversation Partner Name" fx:id="friendNameLabel"/>
+                </top>
+                <center>
+                    <ScrollPane fx:id="mainPane" minWidth="500">
+                        <VBox fx:id="allMessages" minWidth="500">
+                        </VBox>
+                    </ScrollPane>
+                </center>
+                <bottom>
+                    <AnchorPane>
+                        <TextField fx:id="messageTextField" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="150"/>
+
+                        <Button text="Send Message" fx:id="sendMessageButton" AnchorPane.rightAnchor="0" onAction="#sendMessage"/>
+                    </AnchorPane>
+                </bottom>
+            </BorderPane>
+
+        </center>
+
+    </BorderPane>
+</AnchorPane>
