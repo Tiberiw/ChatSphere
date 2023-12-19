@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.map.socialnetwork.controller.user.UserSettingsController"
+            prefHeight="400.0" prefWidth="600.0">
+    <GridPane>
+
+        <Label text="Friend Request Number" GridPane.columnIndex="0" GridPane.rowIndex="1"></Label>
+        <Spinner fx:id="friendRequestNumber" GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseClicked="#changeFriendRequestNumber">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10" initialValue="10"/>
+            </valueFactory>
+        </Spinner>
+        <Label text="Friend Suggestion Number" GridPane.columnIndex="0" GridPane.rowIndex="2"></Label>
+        <Spinner fx:id="friendSuggestionNumber" GridPane.columnIndex="1" GridPane.rowIndex="2" onMouseClicked="#changeFriendSuggestionNumber">
+            <valueFactory>
+                <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10" initialValue="10"/>
+            </valueFactory>
+        </Spinner>
+    </GridPane>
+
+</AnchorPane>

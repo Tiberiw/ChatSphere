@@ -10,7 +10,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.map.socialnetwork.controller.user.FriendRequestController"
             fx:id="root"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@../../../../../styles/styles.css">
     <SplitPane fx:id="mainPane">
         <items>
             <BorderPane fx:id="leftSide">
@@ -28,12 +29,18 @@
                         </columns>
 
                     </TableView>
+
                 </center>
                 <bottom>
-                    <HBox spacing="50" BorderPane.alignment="BOTTOM_CENTER">
-                        <Button text="Accept" fx:id="acceptRequestButton" onAction="#acceptRequest" BorderPane.alignment="BOTTOM_CENTER"/>
-                        <Button text="Reject" fx:id="declineRequestButton" onAction="#rejectRequest" BorderPane.alignment="BOTTOM_CENTER"/>
-                    </HBox>
+
+                    <VBox>
+                        <HBox fx:id="pageButtonContainerInbox" spacing="10" alignment="BASELINE_CENTER"></HBox>
+                        <HBox spacing="50" BorderPane.alignment="BOTTOM_CENTER">
+                            <Button text="Accept" fx:id="acceptRequestButton" onAction="#acceptRequest" BorderPane.alignment="BOTTOM_CENTER"/>
+                            <Button text="Reject" fx:id="declineRequestButton" onAction="#rejectRequest" BorderPane.alignment="BOTTOM_CENTER"/>
+                        </HBox>
+                    </VBox>
+
                 </bottom>
             </BorderPane>
         </items>
@@ -51,13 +58,17 @@
                             <TableColumn fx:id="addFriendsFirstNameField" text="First Name"/>
                             <TableColumn fx:id="addFriendsLastNameField" text="Last Name"/>
                         </columns>
-
                     </TableView>
 
 
                 </center>
                 <bottom>
-                    <Button text="Send Request" fx:id="sendRequestButton" onAction="#sendRequest" BorderPane.alignment="BOTTOM_CENTER" />
+                    <VBox>
+                        <HBox fx:id="pageButtonContainerSendRequest" spacing="10" alignment="BASELINE_CENTER"></HBox>
+
+                        <Button text="Send Request" fx:id="sendRequestButton" onAction="#sendRequest" BorderPane.alignment="BOTTOM_CENTER" />
+                    </VBox>
+
                 </bottom>
             </BorderPane>
         </items>

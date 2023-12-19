@@ -1,0 +1,21 @@
+.pageButton {
+    -fx-background-color: none;
+    -fx-text-fill: #2F855A;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.pageButton:hover {
+    -fx-text-fill: white;
+    -fx-background-color: #2F855A;
+
+}
+
+.selectedPageButton {
+    -fx-border-color: #2F855A;
+;
+}
+
+.list-cell:empty {
+    -fx-opacity: 0;
+}

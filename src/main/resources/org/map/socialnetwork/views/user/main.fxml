@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="700.0"
+            fx:controller="org.map.socialnetwork.controller.user.UserMainController"
+            stylesheets="@../../../../../styles/main-styles.css">
+    <BorderPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.topAnchor="0">
+        <top>
+            <AnchorPane fx:id="topAnchorPane" styleClass="topAnchorPane">
+                <HBox AnchorPane.topAnchor="25" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0" spacing="10" alignment="CENTER_RIGHT">
+                    <Label text="Tik Talk" styleClass="labelNameApp"></Label>
+
+                    <TextField fx:id="universalFilterBar" styleClass="universalFilterBar" prefWidth="400"></TextField>
+                    <Button fx:id="broadcastButton" styleClass="broadcastButton" >Broadcast</Button>
+                    <Button fx:id="notificationsButton" styleClass="notificationsButton">
+                    </Button>
+                </HBox>
+
+            </AnchorPane>
+        </top>
+        <center></center>
+        <left>
+            <AnchorPane prefWidth="180" prefHeight="360">
+                <VBox AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0" fx:id="leftVboxButtons" styleClass="leftVboxButtons" alignment="BASELINE_CENTER">
+                    <Button fx:id="chatsButton" styleClass="chatsButton" prefWidth="Infinity" prefHeight="40" text="Chats">
+
+                    </Button>
+                    <Button fx:id="friendsButton" styleClass="friendsButton" prefWidth="Infinity" prefHeight="40" text="Friends">
+                        <ImageView></ImageView>
+                    </Button>
+                    <Button fx:id="settingsButton" styleClass="settingsButton" prefWidth="Infinity" prefHeight="40" text="Settings">
+                        <ImageView></ImageView>
+                    </Button>
+                </VBox>
+            </AnchorPane>
+        </left>
+    </BorderPane>
+</AnchorPane>

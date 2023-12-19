@@ -12,6 +12,7 @@ import org.map.socialnetwork.repository.database.FriendRequestDatabaseRepository
 import org.map.socialnetwork.repository.database.FriendshipDatabaseRepository;
 import org.map.socialnetwork.repository.database.MessageDatabaseRepository;
 import org.map.socialnetwork.repository.database.UserDatabaseRepository;
+import org.map.socialnetwork.repository.paging.PagingRepository;
 import org.map.socialnetwork.service.FriendRequestService;
 import org.map.socialnetwork.service.FriendshipService;
 import org.map.socialnetwork.service.MessageService;
@@ -29,36 +30,34 @@ import java.util.List;
 public class Start extends Application {
 
     Repository<Long, User> userRepository = new UserDatabaseRepository(new UserValidator());
+    PagingRepository<Long, User> userPagingRepository = new PagingRepository<>(userRepository, "users");
+
     Repository<Pair<Long, Long>, Friendship> friendshipRepository = new FriendshipDatabaseRepository(new FriendshipValidator(), userRepository);
+    PagingRepository<Pair<Long, Long>, Friendship> friendshipPagingRepository = new PagingRepository<>(friendshipRepository, "friendships");
+
+
     Repository<Long, FriendRequest> friendRequestRepository = new FriendRequestDatabaseRepository(userRepository,new FriendRequestValidator());
+    PagingRepository<Long, FriendRequest> friendRequestPagingRepository = new PagingRepository<>(friendRequestRepository, "friendrequests");
+
+
+
     Repository<Long, Message> messageRepository = new MessageDatabaseRepository(new MessageValidator(), userRepository);
-    UserService userService = new UserService(userRepository);
-    FriendshipService friendshipService = new FriendshipService(friendshipRepository, userRepository);
-    FriendRequestService friendRequestService = new FriendRequestService(friendRequestRepository, friendshipRepository, userRepository);
+    UserService userService = new UserService(userPagingRepository);
+    FriendshipService friendshipService = new FriendshipService(friendshipPagingRepository, userPagingRepository);
+    FriendRequestService friendRequestService = new FriendRequestService(friendRequestPagingRepository, friendshipPagingRepository, userPagingRepository);
     MessageService messageService = new MessageService(messageRepository);
     @Override
     public void start(Stage stage) throws IOException{
 
-
-//        User user1 = userRepository.findOne(48L).get();
-//        User user2 = userRepository.findOne(2L).get();
-//        User user3 = userRepository.findOne(3L).get();
-//        User user4 = userRepository.findOne(4L).get();
-//        List<User> toUsers = Arrays.asList(user2, user3, user4);
+//        FXMLLoader loaderTest = new FXMLLoader();
+//        loaderTest.setLocation(getClass().getResource("views/user/main.fxml"));
+//        AnchorPane layoutTest = loaderTest.load();
+//        stage.setScene( new Scene(layoutTest));
 //
 //
-//        Message message = new Message(null, user1, toUsers, "Salut All", LocalDateTime.now(), null);
-//        messageRepository.save(message);
-////
-//        Message message2 = messageRepository.findOne(6L).get();
-//        Message replyMessage = new Message(null, user2, Arrays.asList(user1,user3), "Cf ba", LocalDateTime.now(), message2);
-//        messageRepository.save(replyMessage);
 //
-//        Message rpl = messageRepository.findOne(7L).get();
-//        System.out.println(rpl);
-//
-//        messageRepository.findAll().forEach(System.out::println);
-
+//        stage.setTitle("Dashboard");
+//        stage.show();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("views/start-view.fxml"));

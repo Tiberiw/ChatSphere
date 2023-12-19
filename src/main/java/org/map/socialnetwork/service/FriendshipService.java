@@ -6,6 +6,7 @@ import org.map.socialnetwork.domain.Pair;
 import org.map.socialnetwork.domain.User;
 import org.map.socialnetwork.exception.RepositoryException;
 import org.map.socialnetwork.repository.Repository;
+import org.map.socialnetwork.repository.paging.PagingRepository;
 import org.map.socialnetwork.utils.Events.UserFriendshipEvent;
 import org.map.socialnetwork.utils.Graph;
 import org.map.socialnetwork.utils.Observer.Observable;
@@ -18,11 +19,11 @@ import java.util.stream.StreamSupport;
 
 public class FriendshipService implements Observable {
 
-    Repository<Pair<Long,Long>, Friendship> friendshipRepository;
-    Repository<Long,User> userRepository;
+    PagingRepository<Pair<Long,Long>, Friendship> friendshipRepository;
+    PagingRepository<Long,User> userRepository;
     Graph<User> Network;
     List<Observer> observerList = new ArrayList<>();
-    public FriendshipService(Repository<Pair<Long,Long>, Friendship> friendshipRepository, Repository<Long,User> userRepository) {
+    public FriendshipService(PagingRepository<Pair<Long,Long>, Friendship> friendshipRepository, PagingRepository<Long,User> userRepository) {
         this.Network = new Graph<>();
         this.friendshipRepository = friendshipRepository;
         this.userRepository = userRepository;
@@ -173,6 +174,26 @@ public class FriendshipService implements Observable {
     public String getMostSocial() {
         loadNetwork();
         return Network.showMostSocial();
+    }
+
+    public void setPageSizeFriendships(int pageSizeFriendships) {
+        friendshipRepository.setPageSize(pageSizeFriendships);
+        notifyObservers();
+
+    }
+
+    public void setPageNumberFriendships(int pageNumberFriendships) {
+        friendshipRepository.setPageNumber(pageNumberFriendships);
+        notifyObservers();
+
+    }
+
+    public int getPageNumberFriendships() {
+        return friendshipRepository.getPageNumber();
+    }
+
+    public int getNumberOfPagesFriendships() {
+        return friendshipRepository.getNumberOfPages();
     }
 
     @Override

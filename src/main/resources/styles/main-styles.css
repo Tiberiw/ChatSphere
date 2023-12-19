@@ -1,0 +1,63 @@
+/*.root {*/
+
+/*    --chakra-colors-green-100: #C6F6D5;*/
+/*    --chakra-colors-green-200: #9AE6B4;*/
+/*    --chakra-colors-green-300: #68D391;*/
+/*    --chakra-colors-green-400: #48BB78;*/
+/*    --chakra-colors-green-500: #38A169;*/
+/*    --chakra-colors-green-600: #2F855A;*/
+/*    --chakra-colors-green-700: #276749;*/
+/*    --chakra-colors-green-800: #22543D;*/
+/*    --chakra-colors-green-900: #1C4532;*/
+
+
+/*--chakra-colors-gray-100: #EDF2F7;*/
+/*--chakra-colors-gray-200: #E2E8F0;*/
+/*--chakra-colors-gray-300: #CBD5E0;*/
+/*--chakra-colors-gray-400: #A0AEC0;*/
+/*--chakra-colors-gray-500: #718096;*/
+/*--chakra-color*/
+
+
+/*!*}*!*/
+
+.topAnchorPane {
+    -fx-background-color: white;
+    -fx-border-color: black;
+}
+
+
+
+.leftVboxButtons {
+    -fx-background-color: white;
+    -fx-border-color: none;
+    -fx-padding: 12px;
+}
+
+.labelNameApp {
+    -fx-text-fill: #48BB78;;
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.chatsButton,
+.friendsButton,
+.settingsButton {
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-color: none;
+}
+
+.chatsButton:hover,
+.friendsButton:hover,
+.settingsButton:hover {
+    -fx-border-radius: 8px;
+    -fx-background-color: #38A169;
+    -fx-text-fill: white;
+}
+
+.universalFilterBar {
+    -fx-border-radius: 18px;
+    -fx-background-color: #E2E8F0;
+}

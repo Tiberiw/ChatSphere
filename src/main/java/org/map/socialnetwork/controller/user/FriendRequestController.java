@@ -9,9 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import org.map.socialnetwork.domain.FriendRequest;
+import org.map.socialnetwork.domain.Friend_DTO;
 import org.map.socialnetwork.domain.User;
+import org.map.socialnetwork.domain.UserSettings;
 import org.map.socialnetwork.service.FriendRequestService;
 import org.map.socialnetwork.service.FriendshipService;
 import org.map.socialnetwork.service.UserService;
@@ -27,6 +30,8 @@ public class FriendRequestController implements Observer {
     ObservableList<User> modelSendRequest = FXCollections.observableArrayList();
 
     User user;
+
+    UserSettings userSettings;
 
     @FXML
     AnchorPane root;
@@ -70,8 +75,140 @@ public class FriendRequestController implements Observer {
     @FXML
     Button sendRequestButton;
 
-    public void setUp(User user, UserService userService, FriendshipService friendshipService, FriendRequestService friendRequestService) {
+    @FXML
+    HBox pageButtonContainerInbox;
+
+    @FXML
+    HBox pageButtonContainerSendRequest;
+
+    private int selectedPageInbox = 1;
+    private int selectedPageRequests = 1;
+
+
+
+    public void loadPageButtonsInbox() {
+
+
+        int nrOfElements = friendRequestService.getPendingRequests(user).size();
+        int numberOfPages = nrOfElements / userSettings.getNrElementsPage();
+
+        if(nrOfElements % userSettings.getNrElementsPage() != 0)
+            numberOfPages++;
+
+
+        pageButtonContainerInbox.getChildren().clear();
+
+        if(numberOfPages > 3) {
+            int startIndex = selectedPageInbox - 1;
+            if(startIndex < 1)
+                startIndex = 1;
+            int endIndex = selectedPageInbox + 1;
+            if(endIndex > numberOfPages)
+                endIndex = numberOfPages;
+            for(int i = startIndex; i <= endIndex; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                if(i == selectedPageInbox)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+
+                pageNumberButton.setOnAction(e -> {
+                    selectedPageInbox = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtonsInbox();
+                    loadModels();
+                });
+
+                pageButtonContainerInbox.getChildren().add(pageNumberButton);
+            }
+
+        } else {
+
+            for(int i = 1; i <= numberOfPages; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                pageNumberButton.setOnAction(e -> {
+                    selectedPageInbox = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtonsInbox();
+                    loadModels();
+                });
+
+                pageButtonContainerInbox.getChildren().add(pageNumberButton);
+
+                if(i == selectedPageInbox)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+            }
+
+
+        }
+
+
+    }
+
+
+
+    public void loadPageButtonsSendRequest() {
+
+
+        int nrOfElements = friendRequestService.getPossibleFriends(user).size();
+        int numberOfPages = nrOfElements / userSettings.getNrElementsPage();
+
+        if(nrOfElements % userSettings.getNrElementsPage() != 0)
+            numberOfPages++;
+
+
+        pageButtonContainerSendRequest.getChildren().clear();
+
+        if(numberOfPages > 3) {
+            int startIndex = selectedPageRequests - 1;
+            if(startIndex < 1)
+                startIndex = 1;
+            int endIndex = selectedPageRequests + 1;
+            if(endIndex > numberOfPages)
+                endIndex = numberOfPages;
+            for(int i = startIndex; i <= endIndex; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                if(i == selectedPageRequests)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+
+                pageNumberButton.setOnAction(e -> {
+                    selectedPageRequests = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtonsSendRequest();
+                    loadModels();
+                });
+
+                pageButtonContainerSendRequest.getChildren().add(pageNumberButton);
+            }
+
+        } else {
+
+            for(int i = 1; i <= numberOfPages; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                pageNumberButton.setOnAction(e -> {
+                    selectedPageRequests = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtonsSendRequest();
+                    loadModels();
+                });
+
+                pageButtonContainerSendRequest.getChildren().add(pageNumberButton);
+
+                if(i == selectedPageRequests)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
+    public void setUp(User user,UserSettings userSettings ,UserService userService, FriendshipService friendshipService, FriendRequestService friendRequestService) {
         this.user = user;
+        this.userSettings = userSettings;
         this.userService = userService;
         this.friendshipService = friendshipService;
         this.friendRequestService = friendRequestService;
@@ -100,6 +237,9 @@ public class FriendRequestController implements Observer {
         addFriendsFirstNameField.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         addFriendsLastNameField.setCellValueFactory(new PropertyValueFactory<>("lastName"));
 
+
+        loadPageButtonsInbox();
+        loadPageButtonsSendRequest();
         loadModels();
 
         inboxTableView.setItems(modelInbox);
@@ -108,8 +248,18 @@ public class FriendRequestController implements Observer {
     }
 
     public void loadModels() {
-        modelInbox.setAll(friendRequestService.getPendingRequests(user));
-        modelSendRequest.setAll(friendRequestService.getPossibleFriends(user));
+
+        modelInbox.setAll(friendRequestService.getPendingRequests(user)
+                .stream()
+                .skip((long) (selectedPageInbox - 1) * userSettings.getNrElementsPage() )
+                .limit(userSettings.getNrElementsPage())
+                .toList());
+
+
+        modelSendRequest.setAll(friendRequestService.getPossibleFriends(user).stream()
+                                                    .skip((long) (selectedPageRequests - 1) * userSettings.getNrElementsPage())
+                                                    .limit(userSettings.getNrElementsPage())
+                                                    .toList());
     }
 
     @FXML

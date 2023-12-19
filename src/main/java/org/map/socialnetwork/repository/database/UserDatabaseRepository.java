@@ -146,4 +146,21 @@ public class UserDatabaseRepository implements Repository<Long, User> {
         }
     }
 
+    public Set<User> getResultSet(ResultSet resultSet) throws SQLException {
+
+        Set<User> users = new HashSet<>();
+
+
+        while(resultSet.next()) {
+            Long id = resultSet.getLong("user_id");
+            String first_name = resultSet.getString("first_name");
+            String last_name = resultSet.getString("last_name");
+            User user = new User(id,first_name,last_name);
+            users.add(user);
+        }
+
+        return users;
+
+    }
+
 }

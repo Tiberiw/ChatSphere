@@ -2,6 +2,7 @@ package org.map.socialnetwork.service;
 
 import org.map.socialnetwork.domain.*;
 import org.map.socialnetwork.repository.Repository;
+import org.map.socialnetwork.repository.paging.PagingRepository;
 import org.map.socialnetwork.utils.Observer.Observable;
 import org.map.socialnetwork.utils.Observer.Observer;
 
@@ -14,12 +15,12 @@ import java.util.stream.StreamSupport;
 
 public class FriendRequestService implements Observable {
 
-    Repository<Long, FriendRequest> friendRequestRepository;
-    Repository<Pair<Long,Long>, Friendship> friendshipRepository;
-    Repository<Long, User> userRepository;
+    PagingRepository<Long, FriendRequest> friendRequestRepository;
+    PagingRepository<Pair<Long,Long>, Friendship> friendshipRepository;
+    PagingRepository<Long, User> userRepository;
 
     List<Observer> observerList = new ArrayList<>();
-    public FriendRequestService(Repository<Long, FriendRequest> friendRequestRepository, Repository<Pair<Long, Long>, Friendship> friendshipRepository, Repository<Long, User> userRepository) {
+    public FriendRequestService(PagingRepository<Long, FriendRequest> friendRequestRepository, PagingRepository<Pair<Long, Long>, Friendship> friendshipRepository, PagingRepository<Long, User> userRepository) {
         this.friendRequestRepository = friendRequestRepository;
         this.friendshipRepository = friendshipRepository;
         this.userRepository = userRepository;
@@ -62,11 +63,7 @@ public class FriendRequestService implements Observable {
 
     }
 
-    public List<FriendRequest> getPendingRequests(User user) {
-        return getFriendRequestsReceivedBy(user).stream()
-                .filter(fr -> fr.getStatus().equals("pending"))
-                .collect(Collectors.toList());
-    }
+
 
     public List<FriendRequest> getFriendRequestsSentBy(User user) {
 
@@ -83,6 +80,14 @@ public class FriendRequestService implements Observable {
                 .map(FriendRequest::getFirstUser)
                 .toList();
     }
+
+
+    public List<FriendRequest> getPendingRequests(User user) {
+        return getFriendRequestsReceivedBy(user).stream()
+                .filter(fr -> fr.getStatus().equals("pending"))
+                .collect(Collectors.toList());
+    }
+
 
     public List<User> getPossibleFriends(User user) {
 
@@ -110,6 +115,46 @@ public class FriendRequestService implements Observable {
                 .filter(usr -> !pendingReceivers.contains(usr))
                 .toList();
 
+    }
+
+    public void setPageSizeFriendRequest(int pageSizeFriendRequest) {
+        friendRequestRepository.setPageSize(pageSizeFriendRequest);
+    }
+
+    public void setPageNumberFriendRequest(int pageNumberFriendRequest) {
+        friendRequestRepository.setPageNumber(pageNumberFriendRequest);
+    }
+
+    public int getPageNumberFriendRequest() {
+        return friendRequestRepository.getPageNumber();
+    }
+
+    public int getNumberOfPagesFriendRequest() {
+        return friendRequestRepository.getNumberOfPages();
+    }
+
+    public void setPageSizeFriendships(int pageSizeFriendships) {
+        friendshipRepository.setPageSize(pageSizeFriendships);
+    }
+
+    public void setPageNumberFriendships(int pageNumberFriendships) {
+        friendshipRepository.setPageNumber(pageNumberFriendships);
+    }
+
+    int getNumberOfPagesFriendships() {
+        return friendshipRepository.getNumberOfPages();
+    }
+
+    public void setPageSizeUsers(int pageSizeUsers) {
+        userRepository.setPageSize(pageSizeUsers);
+    }
+
+    public void setPageNumberUsers(int pageNumberUsers) {
+        userRepository.setPageNumber(pageNumberUsers);
+    }
+
+    int getNumberOfPagesUsers() {
+        return userRepository.getNumberOfPages();
     }
 
 

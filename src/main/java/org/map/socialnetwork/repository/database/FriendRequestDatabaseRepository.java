@@ -190,4 +190,30 @@ public class FriendRequestDatabaseRepository implements Repository<Long, FriendR
         }
     }
 
+    @Override
+    public Set<FriendRequest> getResultSet(ResultSet resultSet) throws SQLException {
+
+        Set<FriendRequest> friendRequests = new HashSet<>();
+
+
+        while(resultSet.next()) {
+            Long request_id = resultSet.getLong("request_id");
+            Long user_id1 = resultSet.getLong("user_id1");
+            Long user_id2 = resultSet.getLong("user_id2");
+
+            String status = resultSet.getString("status");
+
+            Optional<User> user1 = userRepository.findOne(user_id1);
+            Optional<User> user2 = userRepository.findOne(user_id2);
+
+            if(user1.isPresent() && user2.isPresent()) {
+                FriendRequest friendRequest = new FriendRequest(request_id, user1.get(), user2.get(), status);
+                friendRequests.add(friendRequest);
+            }
+        }
+
+        return friendRequests;
+
+    }
+
 }

@@ -187,4 +187,9 @@ public class MessageDatabaseRepository implements Repository<Long, Message> {
     public Optional<Message> delete(Long aLong) {
         return Optional.empty();
     }
+
+    @Override
+    public Set<Message> getResultSet(ResultSet resultSet) throws SQLException {
+        return null;
+    }
 }

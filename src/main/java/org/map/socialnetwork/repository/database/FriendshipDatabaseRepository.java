@@ -190,6 +190,29 @@ public class FriendshipDatabaseRepository implements Repository<Pair<Long,Long>,
         }
     }
 
+    @Override
+    public Set<Friendship> getResultSet(ResultSet resultSet) throws SQLException {
+
+        Set<Friendship> friendships = new HashSet<>();
+
+
+        while(resultSet.next()) {
+            Long user_id1 = resultSet.getLong("user_id1");
+            Long user_id2 = resultSet.getLong("user_id2");
+            LocalDateTime date = resultSet.getTimestamp("friends_from").toLocalDateTime();
+
+            Optional<User> user1 = userRepository.findOne(user_id1);
+            Optional<User> user2 = userRepository.findOne(user_id2);
+
+            if(user1.isPresent() && user2.isPresent()) {
+                Friendship friendship = new Friendship(user1.get(), user2.get(), date);
+                friendships.add(friendship);
+            }
+        }
+
+
+        return friendships;
+    }
 
 
 }

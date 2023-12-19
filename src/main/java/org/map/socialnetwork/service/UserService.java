@@ -4,6 +4,7 @@ import org.map.socialnetwork.domain.User;
 import org.map.socialnetwork.exception.RepositoryException;
 import org.map.socialnetwork.exception.ValidatorException;
 import org.map.socialnetwork.repository.Repository;
+import org.map.socialnetwork.repository.paging.PagingRepository;
 import org.map.socialnetwork.utils.Events.EventType;
 import org.map.socialnetwork.utils.Events.UserEvent;
 import org.map.socialnetwork.utils.Events.UserFriendshipEvent;
@@ -16,11 +17,11 @@ import java.util.Optional;
 
 public class UserService implements Observable{
 
-    Repository<Long, User> Repository;
+    PagingRepository<Long, User> Repository;
 
     List<Observer> observerList = new ArrayList<>();
 
-    public UserService(Repository<Long, User> Repository) {
+    public UserService(PagingRepository<Long, User> Repository) {
         this.Repository = Repository;
     }
 
@@ -59,6 +60,19 @@ public class UserService implements Observable{
         return result;
 
     }
+
+    public void setPageSizeUsers(int pageSizeUsers) {
+        Repository.setPageSize(pageSizeUsers);
+    }
+
+    public void setPageNumberUsers(int pageNumberUsers) {
+        Repository.setPageNumber(pageNumberUsers);
+    }
+
+    int getNumberOfPagesUsers() {
+        return Repository.getNumberOfPages();
+    }
+
 
     @Override
     public void addObserver(Observer observer) {

@@ -1,5 +1,6 @@
 package org.map.socialnetwork.controller.user;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,10 +18,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import org.map.socialnetwork.Start;
 import org.map.socialnetwork.controller.admin.AdminFriendshipEditSceneController;
-import org.map.socialnetwork.domain.FriendRequest;
-import org.map.socialnetwork.domain.Friend_DTO;
-import org.map.socialnetwork.domain.Message;
-import org.map.socialnetwork.domain.User;
+import org.map.socialnetwork.domain.*;
 import org.map.socialnetwork.service.FriendRequestService;
 import org.map.socialnetwork.service.FriendshipService;
 import org.map.socialnetwork.service.MessageService;
@@ -38,6 +36,8 @@ public class UserDashboardController implements Observer {
     FriendRequestService friendRequestService;
     MessageService messageService;
     User currentUser;
+
+    UserSettings userSettings;
     User conversationUser;
     ObservableList<User> model = FXCollections.observableArrayList();
     ObservableList<Message> conversation = FXCollections.observableArrayList();
@@ -65,12 +65,91 @@ public class UserDashboardController implements Observer {
     @FXML
     ScrollPane mainPane;
 
+    @FXML
+    HBox pageButtonContainer;
+
+    @FXML
+    Spinner<Integer> pageNumber;
+
+    int selectedPage = 1;
+
     Message reply = null;
     String mode;
 
+    @FXML
+    public void changePageNumber() {
+        userSettings.setNrElementsPage(pageNumber.getValue());
+        loadPageButtons();
+        loadModel();
+    }
+
+    public void loadPageButtons() {
+
+        int nrOfElements = friendshipService.getAllFriendsUser(currentUser.getID()).stream().map(Friend_DTO::getUser).toList().size();
+        int numberOfPages = nrOfElements / userSettings.getNrElementsPage();
+
+        if(nrOfElements % userSettings.getNrElementsPage() != 0)
+            numberOfPages++;
+
+        pageButtonContainer.getChildren().clear();
+
+
+
+        if(numberOfPages > 3) {
+            int startIndex = selectedPage - 1;
+            if(startIndex < 1)
+                startIndex = 1;
+            int endIndex = selectedPage + 1;
+            if(endIndex > numberOfPages)
+                endIndex = numberOfPages;
+            for(int i = startIndex; i <= endIndex; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                if(i == selectedPage)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+
+                pageNumberButton.setOnAction(e -> {
+                    selectedPage = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtons();
+                    loadModel();
+                });
+
+                pageButtonContainer.getChildren().add(pageNumberButton);
+            }
+
+        } else {
+
+            for(int i = 1; i <= numberOfPages; i++) {
+                Button pageNumberButton = new Button(String.valueOf(i));
+                pageNumberButton.getStyleClass().add("pageButton");
+                pageNumberButton.setOnAction(e -> {
+                    selectedPage = Integer.parseInt(((Button)e.getSource()).getText());
+                    loadPageButtons();
+                    loadModel();
+                });
+
+                pageButtonContainer.getChildren().add(pageNumberButton);
+
+                if(i == selectedPage)
+                    pageNumberButton.getStyleClass().add("selectedPageButton");
+            }
+
+
+        }
+
+
+    }
+
 
     public void loadModel() {
-        model.setAll(friendshipService.getAllFriendsUser(currentUser.getID()).stream().map(Friend_DTO::getUser).toList());
+
+
+
+        model.setAll(friendshipService.getAllFriendsUser(currentUser.getID()).stream()
+                .map(Friend_DTO::getUser)
+                .skip((long) (selectedPage - 1) * userSettings.getNrElementsPage())
+                .limit(userSettings.getNrElementsPage())
+                .toList());
 
     }
 
@@ -147,9 +226,11 @@ public class UserDashboardController implements Observer {
         friendshipService.addObserver(this);
         friendRequestService.addObserver(this);
         messageService.addObserver(this);
+        userSettings = new UserSettings(user, 15);
 
         userNameLabel.setText("@" + currentUser.getFirstName() + " " + currentUser.getLastName() + "!");
 
+        loadPageButtons();
         loadModel();
         friendsListView.setItems(model);
         friendsListView.setCellFactory(list -> new ListCell<>(){
@@ -164,7 +245,8 @@ public class UserDashboardController implements Observer {
             }
         });
         friendsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    }
+
+        }
 
     @FXML
     public void sendMessage() {
@@ -200,7 +282,7 @@ public class UserDashboardController implements Observer {
             dialogStage.setTitle("Friend Requests");
 
             FriendRequestController friendRequestController = loader.getController();
-            friendRequestController.setUp(currentUser,userService,friendshipService,friendRequestService);
+            friendRequestController.setUp(currentUser,userSettings,userService,friendshipService,friendRequestService);
 
 
             dialogStage.show();
@@ -208,6 +290,32 @@ public class UserDashboardController implements Observer {
         }catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+    }
+
+
+    @FXML
+    public void showSettingsPage() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Start.class.getResource("views/user/settings.fxml"));
+
+            AnchorPane layout = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setScene(new Scene(layout));
+            dialogStage.setTitle("Settings");
+
+            UserSettingsController userSettingsController = loader.getController();
+            userSettingsController.setUp(userService, friendshipService, friendRequestService);
+
+            dialogStage.show();
+
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 

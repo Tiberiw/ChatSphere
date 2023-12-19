@@ -6,16 +6,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.chart.BubbleChart?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.map.socialnetwork.controller.user.UserDashboardController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@../../../../../styles/styles.css">
     <BorderPane AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
         <top>
             <HBox spacing="20" BorderPane.alignment="TOP_RIGHT">
                 <Label text="Welcome" BorderPane.alignment="TOP_LEFT"/>
                 <Label text="name" fx:id="userNameLabel" BorderPane.alignment="TOP_LEFT"/>
                 <Button text="Friend Requests" fx:id="friendRequestsButton" onAction="#showRequestDialog" BorderPane.alignment="TOP_RIGHT"/>
+                <HBox>
+                    <Label text="Display Number" GridPane.columnIndex="0" GridPane.rowIndex="0"></Label>
+                    <Spinner fx:id="pageNumber" GridPane.columnIndex="1" GridPane.rowIndex="0" onMouseClicked="#changePageNumber">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="1" max="10" initialValue="10"/>
+                        </valueFactory>
+                    </Spinner>
+                </HBox>
 
             </HBox>
         </top>
@@ -23,6 +33,7 @@
             <VBox>
                 <Label text="Friends:"/>
                 <ListView fx:id="friendsListView" onMouseClicked="#friendSelection"/>
+                <HBox fx:id="pageButtonContainer" spacing="10" alignment="BASELINE_CENTER"></HBox>
             </VBox>
         </right>
         <center>
