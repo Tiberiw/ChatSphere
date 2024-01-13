@@ -1,43 +1,13 @@
 package org.map.socialnetwork.domain;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 import java.util.Objects;
 import java.util.StringJoiner;
 
 public class FriendRequest extends Entity<Long>{
 
-    User firstUser;
-    User secondUser;
-    String status;
-
-    private final StringProperty firstUserFirstName = new SimpleStringProperty();
-    private final StringProperty firstUserLastName = new SimpleStringProperty();
-
-
-    public StringProperty firstUserFirstNameProperty() {
-        return firstUserFirstName;
-    }
-
-    public final String getFirstUserFirstName() {
-        return firstUserFirstNameProperty().get();
-    }
-
-    public final void setFirstUserFirstName(String firstUserFirstName) {
-        firstUserFirstNameProperty().set(firstUserFirstName);
-    }
-
-    public StringProperty firstUserLastNameProperty() {
-        return firstUserLastName;
-    }
-    private String getFirstUserLastName() {
-        return firstUserLastNameProperty().get();
-    }
-
-    public final void setFirstUserLastName(String firstUserLastName) {
-        firstUserLastNameProperty().set(firstUserLastName);
-    }
+    private final User firstUser;
+    private final User secondUser;
+    private String status;
 
     public FriendRequest(User firstUser, User secondUser, String status) {
         this.firstUser = firstUser;
@@ -56,23 +26,12 @@ public class FriendRequest extends Entity<Long>{
     public User getFirstUser() {
         return firstUser;
     }
-
-    public void setFirstUser(User firstUser) {
-        this.firstUser = firstUser;
-    }
-
     public User getSecondUser() {
         return secondUser;
     }
-
-    public void setSecondUser(User secondUser) {
-        this.secondUser = secondUser;
-    }
-
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }

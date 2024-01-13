@@ -25,21 +25,44 @@ public class UserDatabaseRepository implements Repository<Long, User> {
             throw new IllegalArgumentException("Invalid Entity");
 
         validator.validate(entity);
+
         //The insert command
         String insertSQLStatement = "insert into users(first_name,last_name) values (?,?);";
+
+        String SQLSelectStatement = "select max(user_id) as id from users;";
+
 
         //Get the connection to database
         try(PreparedStatement preparedStatement = ConnectionManager
                 .getInstance()
                 .getConnection()
-                .prepareStatement(insertSQLStatement)) {
+                .prepareStatement(insertSQLStatement);
+            PreparedStatement preparedStatement2 = ConnectionManager
+                    .getInstance()
+                    .getConnection()
+                .prepareStatement(SQLSelectStatement)) {
             //Set the string
             preparedStatement.setString(1, entity.getFirstName());
             preparedStatement.setString(2,entity.getLastName());
 
             //Get the response from Database
             int response = preparedStatement.executeUpdate();
-            return response==1 ? Optional.of(entity) : Optional.empty();
+
+            if(response == 1) {
+                ResultSet resultSet = preparedStatement2.executeQuery();
+                if(resultSet.next()) {
+                    long user_id = resultSet.getLong("id");
+                    Optional<User> insertedUser = findOne(user_id);
+
+                    if(insertedUser.isPresent()) {
+                        return insertedUser;
+                    }
+                }
+
+            }
+            return Optional.empty();
+
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -59,15 +82,7 @@ public class UserDatabaseRepository implements Repository<Long, User> {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
-                Long idUser = resultSet.getLong("user_id");
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
-                User theUser = new User(idUser,firstName,lastName);
-                return Optional.of(theUser);
-            }
-
-            return Optional.empty();
+            return getResultSet(resultSet).stream().findFirst();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -78,9 +93,7 @@ public class UserDatabaseRepository implements Repository<Long, User> {
     @Override
     public Iterable<User> findAll() {
 
-        Set<User> users = new HashSet<>();
         String sqlStatement = "select * from users;";
-
 
         try(PreparedStatement preparedStatement = ConnectionManager
                 .getInstance()
@@ -90,15 +103,8 @@ public class UserDatabaseRepository implements Repository<Long, User> {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()) {
-                Long id = resultSet.getLong("user_id");
-                String first_name = resultSet.getString("first_name");
-                String last_name = resultSet.getString("last_name");
-                User user = new User(id,first_name,last_name);
-                users.add(user);
-            }
+            return getResultSet(resultSet);
 
-            return users;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

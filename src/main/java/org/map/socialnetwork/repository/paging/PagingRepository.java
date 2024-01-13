@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 
 public class PagingRepository<ID, E extends Entity<ID> > implements Repository<ID, E> {
 
-    String tableName;
+    private final String tableName;
     private final Repository<ID, E> baseRepository;
     private Page<E> currentPage;
     private Page<E> nextPage;
@@ -27,10 +27,14 @@ public class PagingRepository<ID, E extends Entity<ID> > implements Repository<I
         this.baseRepository = baseRepository;
         this.tableName = tableName;
 
-        //TODO Look for correct init
-        currentPage = new Page<>(1, getNumberOfEntities());
-        nextPage = new Page<>(2, getNumberOfEntities());
-        previousPage = new Page<>(0, getNumberOfEntities());
+        int pageSize = getNumberOfEntities();
+        if(pageSize == 0) {
+            pageSize = 100;
+        }
+
+        currentPage = new Page<>(1, pageSize);
+        nextPage = new Page<>(2, pageSize);
+        previousPage = new Page<>(0, pageSize);
         managePages();
     }
 
@@ -101,6 +105,10 @@ public class PagingRepository<ID, E extends Entity<ID> > implements Repository<I
     }
 
     public void managePages() {
+
+
+        //TODO USE CACHING
+
         loadPage(currentPage);
         if(previousPage.getPageNumber() >= 1) {
             loadPage(previousPage);

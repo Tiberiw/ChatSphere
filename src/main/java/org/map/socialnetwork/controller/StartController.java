@@ -27,11 +27,10 @@ public class StartController {
     UserService userService;
     FriendshipService friendshipService;
     FriendRequestService friendRequestService;
-
     MessageService messageService;
+
     @FXML
     TextField usernameField;
-
     @FXML
     Button loginButton;
 

@@ -19,7 +19,153 @@
 /*--chakra-color*/
 
 
-/*!*}*!*/
+@import url('https://fonts.googleapis.com/css2?family=Quantico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap');
+@font-face {
+    src: url("../fonts/ConcertOne-Regular.ttf");
+}
+
+.authenticationLeft {
+    -fx-background-image: url("../images/auth-back.jpg");
+    -fx-background-size: cover;
+    -fx-font-family: 'Quantico', sans-serif;
+}
+.authenticationLeftBox {
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+.authenticationLeftTitle {
+    -fx-text-fill: white;
+    -fx-font-size: 48px;
+}
+
+
+
+.authenticationRightRegister,
+.authenticationRightLogin{
+    -fx-background-color: #F7FAFC;
+}
+
+.authenticationUpperMessage {
+    -fx-font-family: 'Quantico', sans-serif;
+    -fx-text-fill: #008977;
+
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+.authenticationUpperSpecificMessage {
+    -fx-text-fill: #008977;
+    -fx-font-weight: bold;
+    -fx-font-size: 35px;
+    -fx-font-family: 'Quantico', 'sans-serif';
+
+}
+
+
+
+.authenticationBorder {
+-fx-background-color: white;
+-fx-background-insets: 10;
+-fx-background-radius: 10;
+-fx-effect: dropshadow(three-pass-box, black, 7, 0, 0, 0);
+}
+
+
+.authenticationMessage {
+    -fx-font-family: 'Quantico', sans-serif;
+    -fx-text-fill: #008977;
+    -fx-font-weight: 600;
+    -fx-font-size: 55px;
+}
+
+/*.formLabel {*/
+/*    -fx-font-family: 'Roboto', 'sans-serif';*/
+/*    -fx-text-fill: #2596be;*/
+/*}*/
+
+.formField {
+    -fx-border-color: #77592c;
+    /*-fx-background-color: #F7FAFC; FOR HOVER*/
+    -fx-background-color: white;
+    -fx-border-radius: 4px;
+    -fx-border-width: 3px;
+    -fx-font-size: 15px;
+    -fx-text-fill: black;
+
+}
+
+.formField:focused {
+    -fx-effect: dropshadow(three-pass-box, black, 2, 0, 0, 0);
+    -fx-background-color: #F7FAFC;
+    -fx-background-radius: 8px;
+}
+
+.authenticationButton {
+    -fx-font-family: 'Roboto', 'sans-serif';
+    -fx-padding: 8px 12px;
+    /*-fx-background-color: hsl(168, 26%, 97%);*/
+    -fx-text-fill: #008977;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 3px;
+    -fx-border-color: #008977;
+    -fx-background-color: none;
+}
+
+.authenticationButton:hover,
+.authenticationButton:focused{
+    -fx-text-fill: white;
+    -fx-background-color: #008977;
+    -fx-background-radius: 10px;
+}
+
+.underAuthenticationText,
+.underAuthenticationButton,
+.formLabel{
+    -fx-font-family: 'Roboto', 'sans-serif';
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.formLabel {
+    -fx-font-size: 16px;
+}
+.underAuthenticationButton {
+    -fx-border-color: none;
+    -fx-background-color: none;
+    -fx-text-fill: #008977;
+    -fx-padding: 0px;
+}
+
+.underAuthenticationButton:hover {
+    -fx-text-fill: #007061;
+}
+
+.underAuthenticationButton:focused {
+    -fx-border-width: 1px;
+    -fx-border-color: grey;
+    -fx-border-style: dotted;
+}
+
+
+
+
+
+.registerForm {
+    /*-fx-background-color: white;*/
+}
+
+.loginForm {
+
+}
+
+
+
+
+
 
 .topAnchorPane {
     -fx-background-color: white;

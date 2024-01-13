@@ -4,7 +4,6 @@ import org.map.socialnetwork.domain.Entity;
 import org.map.socialnetwork.domain.Message;
 import org.map.socialnetwork.domain.User;
 import org.map.socialnetwork.repository.Repository;
-import org.map.socialnetwork.repository.database.MessageDatabaseRepository;
 import org.map.socialnetwork.utils.Observer.Observable;
 import org.map.socialnetwork.utils.Observer.Observer;
 
@@ -25,7 +24,7 @@ public class MessageService implements Observable {
 
     public List<Message> getChronologicalConv(User firstUser, User secondUser) {
         return StreamSupport.stream(messageRepository.findAll().spliterator(), false)
-                .filter(message -> ((Objects.equals(message.getFrom().getID(), firstUser.getID()) && message.getTo().contains(secondUser)) || (Objects.equals(message.getFrom().getID(), secondUser.getID()) && message.getTo().contains(firstUser) )))
+                .filter(message -> ((Objects.equals(message.getSender().getID(), firstUser.getID()) && message.getReceivers().contains(secondUser)) || (Objects.equals(message.getSender().getID(), secondUser.getID()) && message.getReceivers().contains(firstUser) )))
                 .sorted(Comparator.comparing(Entity::getID))
                 .toList();
     }

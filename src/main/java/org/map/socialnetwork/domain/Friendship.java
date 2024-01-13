@@ -7,8 +7,8 @@ import java.util.Objects;
 
 public class Friendship extends Entity<Pair<Long,Long>>{
 
-    private User firstUser;
-    private User secondUser;
+    private final User firstUser;
+    private final User secondUser;
     private LocalDateTime date;
 
     public Friendship(User firstUser, User secondUser, LocalDateTime date) {
@@ -43,15 +43,6 @@ public class Friendship extends Entity<Pair<Long,Long>>{
 
         return date;
     }
-
-    public void setfirstUser(User firstUser) {
-        this.firstUser = firstUser;
-    }
-
-    public void setsecondUser(User secondUser) {
-        this.secondUser = secondUser;
-    }
-
     public void setDate(LocalDateTime date) {
         this.date = date;
     }

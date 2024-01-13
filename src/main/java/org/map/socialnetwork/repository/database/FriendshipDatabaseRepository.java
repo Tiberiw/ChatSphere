@@ -76,24 +76,7 @@ public class FriendshipDatabaseRepository implements Repository<Pair<Long,Long>,
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
-                Long user_id1 = resultSet.getLong("user_id1");
-                Long user_id2 = resultSet.getLong("user_id2");
-
-                LocalDateTime date = resultSet.getTimestamp("friends_from").toLocalDateTime();
-
-
-                Optional<User> user1 = userRepository.findOne(user_id1);
-                Optional<User> user2 = userRepository.findOne(user_id2);
-                //We have to get the users Objects -> make a separate query on the users table in the DB
-                if (user1.isPresent() && user2.isPresent()) {
-                    Friendship friendship = new Friendship(user1.get(), user2.get(), date);
-                    return Optional.of(friendship);
-                }
-            }
-
-            return Optional.empty();
-
+            return getResultSet(resultSet).stream().findFirst();
 
 
         } catch (SQLException e) {
@@ -103,7 +86,7 @@ public class FriendshipDatabaseRepository implements Repository<Pair<Long,Long>,
 
     @Override
     public Iterable<Friendship> findAll() {
-        Set<Friendship> friendships = new HashSet<>();
+
         String sqlStatement = "select * from friendships;";
         try(PreparedStatement preparedStatement = ConnectionManager
                 .getInstance()
@@ -111,21 +94,8 @@ public class FriendshipDatabaseRepository implements Repository<Pair<Long,Long>,
                 .prepareStatement(sqlStatement)) {
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
-                Long user_id1 = resultSet.getLong("user_id1");
-                Long user_id2 = resultSet.getLong("user_id2");
-                LocalDateTime date = resultSet.getTimestamp("friends_from").toLocalDateTime();
 
-                Optional<User> user1 = userRepository.findOne(user_id1);
-                Optional<User> user2 = userRepository.findOne(user_id2);
-
-                if(user1.isPresent() && user2.isPresent()) {
-                    Friendship friendship = new Friendship(user1.get(), user2.get(), date);
-                    friendships.add(friendship);
-                }
-            }
-
-            return friendships;
+            return getResultSet(resultSet);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -209,7 +179,6 @@ public class FriendshipDatabaseRepository implements Repository<Pair<Long,Long>,
                 friendships.add(friendship);
             }
         }
-
 
         return friendships;
     }

@@ -164,14 +164,14 @@ public class UserDashboardController implements Observer {
         allMessages.getChildren().clear();
         for(Message message : conversation) {
 
-            if(message.getFrom().getID().equals(conversationUser.getID())) {
+            if(message.getSender().getID().equals(conversationUser.getID())) {
                 RadioButton radioButton = new RadioButton(message.getMessage());
                 radioButton.setWrapText(true);
                 radioButton.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 16));
                 HBox newItem = new HBox();
-                if(message.getReply() != null) {
+                if(message.getReplyTo() != null) {
                     VBox replyItem = new VBox();
-                    String allText = message.getReply().getMessage();
+                    String allText = message.getReplyTo().getMessage();
                     if(allText.length() > 20)
                         allText = allText.substring(0, 20) + "...";
                     replyItem.getChildren().add(new Label(allText));
@@ -191,10 +191,10 @@ public class UserDashboardController implements Observer {
                 label.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
                 label.setWrapText(true);
                 HBox newItem = new HBox();
-                if(message.getReply() != null) {
+                if(message.getReplyTo() != null) {
                     VBox replyItem = new VBox();
 
-                    String allText = message.getReply().getMessage();
+                    String allText = message.getReplyTo().getMessage();
                     if(allText.length() > 20)
                         allText = allText.substring(0, 20) + "...";
                     replyItem.getChildren().add(new Label(allText));

@@ -1,26 +1,21 @@
 package org.map.socialnetwork.repository.database;
 
 import org.map.socialnetwork.domain.FriendRequest;
-import org.map.socialnetwork.domain.Friendship;
-import org.map.socialnetwork.domain.Pair;
 import org.map.socialnetwork.domain.User;
 import org.map.socialnetwork.repository.ConnectionManager;
 import org.map.socialnetwork.repository.Repository;
 import org.map.socialnetwork.validator.Validator;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class FriendRequestDatabaseRepository implements Repository<Long, FriendRequest> {
     private final Repository<Long, User> userRepository;
-
     private final Validator<FriendRequest> validator;
 
-    public FriendRequestDatabaseRepository(Repository<Long, User> userRepository, Validator<FriendRequest> validator) {
-
+    public FriendRequestDatabaseRepository(Validator<FriendRequest> validator, Repository<Long, User> userRepository) {
         this.userRepository = userRepository;
         this.validator = validator;
     }
@@ -29,18 +24,16 @@ public class FriendRequestDatabaseRepository implements Repository<Long, FriendR
     public Optional<FriendRequest> save(FriendRequest entity) {
 
         if(entity == null) {
-            System.out.println("Intra aici entity = null");
             return Optional.empty();
         }
 
         validator.validate(entity);
 
-        //Check if the friendship exists
+        //Check if the friend request exists
         if(entity.getID() != null) {
             Optional<FriendRequest> friendRequest = findOne(entity.getID());
 
             if(friendRequest.isPresent()) {
-                System.out.println("Intra ca e deja prezent");
                 return Optional.empty();
 
             }
@@ -72,32 +65,17 @@ public class FriendRequestDatabaseRepository implements Repository<Long, FriendR
 
     @Override
     public Optional<FriendRequest> findOne(Long friendRequestID) {
+
         String sqlStatement = "select * from friendrequests where request_id = ?;";
+
         try(PreparedStatement preparedStatement = ConnectionManager.getInstance()
                 .getConnection()
                 .prepareStatement(sqlStatement)) {
-            preparedStatement.setLong(1, friendRequestID);
 
+            preparedStatement.setLong(1, friendRequestID);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
-                Long request_id = resultSet.getLong("request_id");
-
-                Long user_id1 = resultSet.getLong("user_id1");
-                Long user_id2 = resultSet.getLong("user_id2");
-
-                String status = resultSet.getString("status");
-
-                Optional<User> user1 = userRepository.findOne(user_id1);
-                Optional<User> user2 = userRepository.findOne(user_id2);
-                //We have to get the users Objects -> make a separate query on the users table in the DB
-                if (user1.isPresent() && user2.isPresent()) {
-                    FriendRequest friendRequest = new FriendRequest(request_id, user1.get(), user2.get(), status);
-                    return Optional.of(friendRequest);
-                }
-            }
-
-            return Optional.empty();
+            return getResultSet(resultSet).stream().findFirst();
 
 
         } catch (SQLException e) {
@@ -107,31 +85,17 @@ public class FriendRequestDatabaseRepository implements Repository<Long, FriendR
 
     @Override
     public Iterable<FriendRequest> findAll() {
-        Set<FriendRequest> friendRequests = new HashSet<>();
+
         String sqlStatement = "select * from friendrequests;";
+
         try(PreparedStatement preparedStatement = ConnectionManager
                 .getInstance()
                 .getConnection()
                 .prepareStatement(sqlStatement)) {
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            while(resultSet.next()) {
-                Long request_id = resultSet.getLong("request_id");
-                Long user_id1 = resultSet.getLong("user_id1");
-                Long user_id2 = resultSet.getLong("user_id2");
 
-                String status = resultSet.getString("status");
-
-                Optional<User> user1 = userRepository.findOne(user_id1);
-                Optional<User> user2 = userRepository.findOne(user_id2);
-
-                if(user1.isPresent() && user2.isPresent()) {
-                    FriendRequest friendRequest = new FriendRequest(request_id, user1.get(), user2.get(), status);
-                    friendRequests.add(friendRequest);
-                }
-            }
-
-            return friendRequests;
+            return getResultSet(resultSet);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -200,7 +164,6 @@ public class FriendRequestDatabaseRepository implements Repository<Long, FriendR
             Long request_id = resultSet.getLong("request_id");
             Long user_id1 = resultSet.getLong("user_id1");
             Long user_id2 = resultSet.getLong("user_id2");
-
             String status = resultSet.getString("status");
 
             Optional<User> user1 = userRepository.findOne(user_id1);
